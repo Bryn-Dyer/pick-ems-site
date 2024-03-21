@@ -1,0 +1,11 @@
+Revise SQL queries to use prepared statement - In progress, mostly finished
+Create Login System - Done
+Create an index page
+Create a navigation bar/page
+Update login system to have tiers of users
+User tiers to restrict access to pages based on user
+Add a way to delete and correct games and users
+Check for and then fix any vulnerabilities on the site
+Develop front end with CSS, JS and HTML
+    Could use either bootstrap or react
+Potentially Pivot To Node JS rather than PHP for queries/backend
