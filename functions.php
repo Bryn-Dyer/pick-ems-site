@@ -85,3 +85,13 @@ function printResults($link) {
         }
     }
 }
+
+function getUserID($link, $user) {
+    $stmt = mysqli_prepare($link, "SELECT user_id FROM users WHERE Name = ?");
+    mysqli_stmt_bind_param($stmt,"s",$user);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_bind_result($stmt, $userID);
+    mysqli_stmt_fetch($stmt);
+    mysqli_stmt_close($stmt);
+    return $userID;
+}
