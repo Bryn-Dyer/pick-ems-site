@@ -22,6 +22,7 @@ if(isset($_POST["sumbit"])) {
         $stmt = mysqli_prepare($link, "SELECT * FROM teams WHERE name = ?, conference = ?, division = ?");
         mysqli_stmt_bind_param($stmt, "sss", $name, $conf, $div);
         mysqli_stmt_execute($stmt);
+        mysqli_stmt_store_result($stmt);
         if(mysqli_stmt_num_rows($stmt) > 0) {
             echo "Team already exists";
         } elseif(mysqli_stmt_num_rows($stmt) == 0) {

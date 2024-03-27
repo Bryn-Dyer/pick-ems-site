@@ -22,8 +22,21 @@ if (isset($_POST["predict"])) {
     }
     $outcome = $_POST["Prediction"];
     if(empty($gameErr) && empty($userErr)) {
-        $stmt = mysqli_prepare($link, "INSERT INTO predictions (game_id, user_id, prediction) VALUES (?,?,?) ON DUPLICATE KEY UPDATE prediction = ?");
-        mysqli_stmt_bind_param($stmt, "iiss" , $game_id, $user_id, $outcome, $outcome);
+        $stmt = mysqli_prepare($link, "SELECT * FROM predictions WHERE user_id = ? AND game_id = ?");
+        mysqli_stmt_bind_param($stmt, "ii", $user_id, $game_id);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_store_result($stmt);
+        if(mysqli_stmt_num_rows($stmt) == 0) {
+            mysqli_stmt_close($stmt);
+            $stmt = mysqli_prepare($link, "INSERT INTO predictions (game_id, user_id, prediction) VALUES (?,?,?)");
+            mysqli_stmt_bind_param($stmt, "iis" , $game_id, $user_id, $outcome);
+        } elseif(mysqli_stmt_num_rows($stmt) == 1) {
+            mysqli_stmt_close($stmt);
+            $stmt = mysqli_prepare($link, "UPDATE predictions SET game_id = ?, user_id = ?, prediction = ? WHERE game_id = ? AND user_id = ?");
+            mysqli_stmt_bind_param($stmt, "iisii", $game_id, $user_id, $outcome, $game_id, $user_id);
+        } else {
+            echo "An error has occurred, try again later";
+        }
         mysqli_stmt_execute($stmt);
         if(mysqli_stmt_affected_rows($stmt) > 0) {
             echo "Prediction Submitted";

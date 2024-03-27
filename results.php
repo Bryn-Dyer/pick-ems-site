@@ -17,6 +17,7 @@ if (isset($_POST["submit_result"])) {
         $stmt = mysqli_prepare($link, "SELECT game_id FROM results WHERE ?");
         mysqli_stmt_bind_param($stmt, "i", $game_id);
         mysqli_stmt_execute($stmt);
+        mysqli_stmt_store_result($stmt);
         if(mysqli_stmt_num_rows($stmt) > 0 ) {
             $stmt = mysqli_prepare($link, "UPDATE results SET result = ? WHERE game_id = ?");
             mysqli_stmt_bind_param($stmt, "si", $outcome, $game_id);
