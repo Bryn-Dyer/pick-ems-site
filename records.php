@@ -17,7 +17,7 @@ if(isset($_GET["submit"])) {
     if(empty($_GET['User']) && !empty($_SESSION['id'])) {
         // Fill in from session
         $userID = $_SESSION['id'];
-        echo $userID;
+        $user = $_SESSION['username'];
     } elseif(!empty($_GET['User'])) {
         // Fill from get
         $user = $_GET['User'];
@@ -27,12 +27,26 @@ if(isset($_GET["submit"])) {
     if(empty($userErr)) {
         if(empty($userID)) {
             $userID = getUserID($link, $user);
-            echo $userID;
+        }
+        $stmt = mysqli_prepare($link, "SELECT * FROM predictions WHERE user_id = ?");
+        mysqli_stmt_bind_param($stmt, "i", $userID);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_store_result($stmt);
+        if(mysqli_stmt_num_rows($stmt) == 0 ) {
+            $predErr = 'This user has not made any predictions';
+            mysqli_stmt_close($stmt);
+        } else {
+            $predSum = mysqli_stmt_num_rows($stmt);
+            mysqli_stmt_close($stmt);
+            $stmt = mysqli_prepare($link, "SELECT * FROM predictions INNER JOIN results ON predictions.prediction = results.result AND predictions.game_id = results.game_id WHERE user_id = ?");
+            mysqli_stmt_bind_param($stmt, "i", $userID);
+            mysqli_stmt_execute($stmt);
+            mysqli_stmt_store_result($stmt);
+            $correctSum = mysqli_stmt_num_rows($stmt);
         }
         if(empty($predErr)) {
-            echo "Test 5";
-            //$accuracy = ($correctSum/$predSum);
-            // echo $user . "has a %" . $accuracy . "accuracy"; 
+            $accuracy = round(($correctSum / $predSum), 4) * 100;
+            echo $user . " has a " . $accuracy . "% accuracy over all predictions.";
         } else {
             echo $predErr;
         }

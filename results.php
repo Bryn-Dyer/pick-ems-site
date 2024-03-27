@@ -14,23 +14,26 @@ if (isset($_POST["submit_result"])) {
     }
     $outcome = $_POST["Outcome"];
     if(empty($gameErr)) {
-        $stmt = mysqli_prepare($link, "SELECT game_id FROM results WHERE ?");
+        $stmt = mysqli_prepare($link, "SELECT * FROM results WHERE game_id = ?");
         mysqli_stmt_bind_param($stmt, "i", $game_id);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_store_result($stmt);
-        if(mysqli_stmt_num_rows($stmt) > 0 ) {
+        if(mysqli_stmt_num_rows($stmt) == 0) {
+            mysqli_stmt_close($stmt);
+            $stmt = mysqli_prepare($link, "INSERT INTO results (game_id, result) VALUES (?,?)");
+            mysqli_stmt_bind_param($stmt, "is", $game_id, $outcome);
+        } elseif(mysqli_stmt_num_rows($stmt) == 1) {
             $stmt = mysqli_prepare($link, "UPDATE results SET result = ? WHERE game_id = ?");
             mysqli_stmt_bind_param($stmt, "si", $outcome, $game_id);
         } else {
-            $stmt = mysqli_prepare($link, "INSERT INTO results (game_id,results) VALUES (?,?)");
-            mysqli_stmt_bind_param($stmt, "is", $game_id, $outcome);
+            echo "An error has occurred, try again later";
         }
         mysqli_stmt_execute($stmt);
-        if(mysqli_stmt_affected_rows($stmt) > 0) {
-            echo "Result Successfully Submitted";
+        if(mysqli_stmt_affected_rows($stmt) == 1) {
+            echo "Result submitted successfully";
         } else {
-            echo 'Error: ' . mysqli_stmt_error($stmt);
-        } 
+            echo "An error has occured, try again later";
+        }
     } else {
         echo $gameErr;
     }
