@@ -26,23 +26,13 @@ if(isset($_GET["submit"])) {
     }
     if(empty($userErr)) {
         if(empty($userID)) {
-            $userID = getUserID($link, $user);
+            $userID = getUserInfo($link, $user, 0);
         }
-        $stmt = mysqli_prepare($link, "SELECT * FROM predictions WHERE user_id = ?");
-        mysqli_stmt_bind_param($stmt, "i", $userID);
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_store_result($stmt);
-        if(mysqli_stmt_num_rows($stmt) == 0 ) {
+        $predSum = getUserPredictionInfo($link, $userID, 0);
+        if($predSum == 0) {
             $predErr = 'This user has not made any predictions';
-            mysqli_stmt_close($stmt);
         } else {
-            $predSum = mysqli_stmt_num_rows($stmt);
-            mysqli_stmt_close($stmt);
-            $stmt = mysqli_prepare($link, "SELECT * FROM predictions INNER JOIN results ON predictions.prediction = results.result AND predictions.game_id = results.game_id WHERE user_id = ?");
-            mysqli_stmt_bind_param($stmt, "i", $userID);
-            mysqli_stmt_execute($stmt);
-            mysqli_stmt_store_result($stmt);
-            $correctSum = mysqli_stmt_num_rows($stmt);
+            $correctSum = getUserPredictionInfo($link, $userID, 1);;
         }
         if(empty($predErr)) {
             $accuracy = round(($correctSum / $predSum), 4) * 100;

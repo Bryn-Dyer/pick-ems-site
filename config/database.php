@@ -13,4 +13,5 @@ if ($conn->connect_error) {
 
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+databaseInitialise($link);
 ?>

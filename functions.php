@@ -86,12 +86,85 @@ function printResults($link) {
     }
 }
 
-function getUserID($link, $user) {
-    $stmt = mysqli_prepare($link, "SELECT user_id FROM users WHERE Name = ?");
-    mysqli_stmt_bind_param($stmt,"s",$user);
+function getUserInfo($link, $input, $selector) {
+    if($selector == 0) {
+        $stmt = mysqli_prepare($link, "SELECT user_id FROM users WHERE Name = ?");
+        mysqli_stmt_bind_param($stmt,"s",$input);
+    }
+    if($selector == 1) {
+        $stmt = mysqli_prepare($link, "SELECT Name FROM users WHERE user_id = ?");
+        mysqli_stmt_bind_param($stmt,"i",$input);
+    }
     mysqli_stmt_execute($stmt);
     mysqli_stmt_bind_result($stmt, $userID);
     mysqli_stmt_fetch($stmt);
     mysqli_stmt_close($stmt);
     return $userID;
+}
+
+function getUserPredictionInfo($link, $userID, $selector) {
+    if($selector == 0) {
+        $stmt = mysqli_prepare($link, "SELECT * FROM predictions WHERE user_id = ?");
+    } elseif($selector == 1) {
+        $stmt = mysqli_prepare($link, "SELECT * FROM predictions INNER JOIN results ON predictions.prediction = results.result AND predictions.game_id = results.game_id WHERE user_id = ?");
+    }
+    mysqli_stmt_bind_param($stmt, "i", $userID);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_store_result($stmt);
+    $numRows = mysqli_stmt_num_rows($stmt);
+    mysqli_stmt_close($stmt);
+    return $numRows;
+}
+
+function databaseInitialise($link) {
+        $query = "CREATE TABLE IF NOT EXISTS teams(
+            team_id INT(11) AUTO_INRCREMENT 
+            name VARCHAR(255) NOT NULL
+            conference VARCHAR(255)
+            division VARCHAR(255)
+            )";
+        initialiseExecute($link, $query);
+        $query = "CREATE TABLE IF NOT EXISTS users(
+            user_id INT(11) AUTO_INCREMENT
+            Name VARCHAR(255) NOT NULL
+            hash VARCHAR(255) NOT NULL
+            Access_Level INT(11) NOT NULL
+            )";
+        initialiseExecute($link, $query);
+    $query = "CREATE TABLE IF NOT EXISTS game (
+        game_id INT(11) AUTO_INCREMENT,
+        Away INT(11) NOT NULL
+        Home INT(11) NOT NULL
+        date DATE NOT NULL
+        season_week enum('1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','Wild Card','Divisional','Conference','Super Bowl') NOT NULL
+        year INT(11) NOT NULL
+        PRIMARY KEY (game_id)
+        FOREIGN KEY (Away) REFERENCES teams(team_id) on DELETE restrict ON UPDATE cascade
+        FOREIGN KEY (Home) REFERENCES teams(team_id) ON DELETE restrict ON UPDATE cascade
+        )";
+    initialiseExecute($link, $query);
+    $query = "CREATE TABLE IF NOT EXISTS predictions(
+        game_id INT(11) NOT NULL
+        user_id INT(11) NOT NULL
+        prediction enum('Away','Home','Draw')
+        PRIMARY KEY (game_id, user_id)
+        FOREIGN KEY (game_id) REFERENCES games(game_id) ON DELETE cascade
+        FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE cascade
+        )";
+    initialiseExecute($link, $query);
+    $query = "CREATE TABLE IF NOT EXISTS results(
+        game_id INT(11) NOT NULL
+        result enum('Away','Home','Draw') 
+        PRIMARY KEY (game_id)
+        FOREIGN KEY (game_id) REFERENCES games(game_id) ON DELETE cascade
+        )";
+    initialiseExecute($link, $query);
+}
+
+function initialiseExecute($link, $query) {
+    try {
+    mysqli_execute_query($link, $query);
+    } catch(Exception $error) {
+        echo $error . "</br>" . mysqli_errno($link);
+    }
 }
