@@ -8,7 +8,7 @@ require 'functions.php';
 include_once "header.php";
 session_start();
 if(!isset($_SESSION['loggedin'])) {
-    header("Location: localhost/pick-ems/index.php");
+    header("Location: index.php");
 }
 $game_id = $user_id = $ouctome = "";
 $gameErr = $userErr = "";
