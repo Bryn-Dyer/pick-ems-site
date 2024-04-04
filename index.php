@@ -19,13 +19,13 @@ if(!isset($_SESSION['loggedin'])) {
 <body>
     <div>
         <?php if($accessLevel >= 1):?>
-        <a href=localhost/pick-ems/create_team.php>Create Team</a></br>
-        <a href=localhost/pick-ems/create_game.php>Create Game</a></br>
+        <a href=create_team.php>Create Team</a></br>
+        <a href=create_game.php>Create Game</a></br>
         <?php endif?>
-        <a href=localhost/pick-ems/schedule/php>Schedule</a></br>
-        <a href=localhost/pick-ems/predict.php>Predict</a></br>
-        <a href=localhost/pick-ems/results.php>Results</a></br>
-        <a href=localhost/pick-ems/records.php>records</a></br>
+        <a href=schedule/php>Schedule</a></br>
+        <a href=predict.php>Predict</a></br>
+        <a href=results.php>Results</a></br>
+        <a href=records.php>Records</a></br>
     </div>
 </body>
 </html>

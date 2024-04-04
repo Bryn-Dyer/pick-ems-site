@@ -37,6 +37,7 @@ if (isset($_POST['submit'])) {
     mysqli_stmt_execute($stmt);
         if(mysqli_stmt_affected_rows($stmt)) {
             echo "User Registered";
+            header("Location: login.php");
         } else {
             echo 'Error: ' . mysqli_stmt_error($stmt);
         }

@@ -24,7 +24,7 @@ if(isset($_POST["login"])) {
                         $_SESSION['id'] = $id;
                         $_SESSION['username'] = $username;
                         echo "Successful Login";
-                        header("Location: localhost/pick-ems/index.php");
+                        header("Location: index.php");
                     } else {
                         echo "Invalid username or password";
                     }

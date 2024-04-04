@@ -6,7 +6,7 @@ Ability to submit multiple games at a time
 */
 session_start();
 if(!isset($_SESSION['loggedin'])) {
-    header("Location: localhost/pick-ems/index.php");
+    header("Location: index.php");
 }
 $game_id = $outcome = "";
 $gameErr = '';
