@@ -1,7 +1,7 @@
 <?php 
 include "functions.php";
 include_once "header.php";
-// databaseInitialise($link); Need to fix
+databaseInitialise($link); // Need to fix
 session_start();
 if(!isset($_SESSION['loggedin'])) {
     header("Location: localhost/pick-ems/login.php");
