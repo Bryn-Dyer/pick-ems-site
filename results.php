@@ -4,6 +4,10 @@ include_once "header.php";
 /*TO DO:
 Ability to submit multiple games at a time
 */
+session_start();
+if(!isset($_SESSION['loggedin'])) {
+    header("Location: localhost/pick-ems/index.php");
+}
 $game_id = $outcome = "";
 $gameErr = '';
 if (isset($_POST["submit_result"])) {

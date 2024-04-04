@@ -1,9 +1,10 @@
 <?php 
 include "header.php";
-
+include "functions.php";
+databaseInitialise($link);
 session_start();
 if(!isset($_SESSION['loggedin'])) {
-    header("Location: localhost/pick-ems/login");
+    header("Location: localhost/pick-ems/login.php");
 } else {
     $stmt = mysqli_prepare($link, "SELECT Access_Level FROM users WHERE user_id = ?");
     mysqli_stmt_bind_param($stmt, "i", $_SESSION["id"]);

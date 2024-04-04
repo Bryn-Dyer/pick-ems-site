@@ -1,5 +1,9 @@
 <?php
 include "header.php";
+session_start();
+if(!isset($_SESSION['loggedin'])) {
+    header("Location: localhost/pick-ems/index.php");
+}
 $name = $conf = $div = '';
 $nameErr = $confErr = $divErr = '';
 if(isset($_POST["sumbit"])) {

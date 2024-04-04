@@ -6,9 +6,13 @@ User can submit multiple games at a time
 */
 require 'functions.php';
 include_once "header.php";
+session_start();
+if(!isset($_SESSION['loggedin'])) {
+    header("Location: localhost/pick-ems/index.php");
+}
 $game_id = $user_id = $ouctome = "";
 $gameErr = $userErr = "";
-session_start();
+
 if (isset($_POST["predict"])) {
     if(empty($_POST["game_id"])){
         $gameErr = "Game ID Required";

@@ -13,6 +13,9 @@ include 'functions.php';
 $userErr = $predErr = '';
 $user = $predSum = $correctSum = $userID = '';
 session_start();
+if(!isset($_SESSION['loggedin'])) {
+    header("Location: localhost/pick-ems/index.php");
+}
 if(isset($_GET["submit"])) {
     if(empty($_GET['User']) && !empty($_SESSION['id'])) {
         // Fill in from session

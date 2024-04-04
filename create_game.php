@@ -2,6 +2,10 @@
 /*TO DO:
 
 */
+session_start();
+if(!isset($_SESSION['loggedin'])) {
+    header("Location: localhost/pick-ems/index.php");
+}
 
 include 'header.php';
 $homeTeam = $awayTeam = $date = $week = $year = '';
