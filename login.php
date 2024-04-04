@@ -59,4 +59,5 @@ if(isset($_POST["login"])) {
         <input type="submit" name="login" value="Login">
     </div>
     </form>
+    <a href="register.php">Register</a>
 </body>
