@@ -133,7 +133,7 @@ function databaseInitialise($link) {
             Access_Level INT(11) NOT NULL
             )");
         initialiseExecute($stmt, $link);
-    $stmt = mysqli_prepare($link, "CREATE TABLE IF NOT EXISTS pick_ems.game(
+    $stmt = mysqli_prepare($link, "CREATE TABLE IF NOT EXISTS pick_ems.games(
         game_id INT(11) AUTO_INCREMENT NOT NULL,
         Away INT(11) NOT NULL ,
         Home INT(11) NOT NULL ,

@@ -1,9 +1,37 @@
 <?php 
 include "functions.php";
-$user_ID = 4;
-$stmt = mysqli_prepare($link, "SELECT * FROM predictions WHERE user_id = ?");
-mysqli_stmt_bind_param($stmt, "i", $user_ID);
-mysqli_stmt_execute($stmt);
-mysqli_stmt_store_result($stmt);
-echo mysqli_stmt_num_rows($stmt);
 ?>
+
+<!DOCTYPE html>
+<html lang="english">
+    <body>
+        <label for="Query">Query by:</label>
+        <select name="Query" id="Query">
+            <option value="User">User</option>
+            <option value="Week">Week</option>
+            <option value="Season">Season</option>
+        </select>
+        <form id="formQuery">
+            <input type="text" name="text" placeholder="Optional">
+        </form>
+        <button type="button" onlcick="add()">Add</button>
+        <button type="button" onlcick="remove()">Remove</button>
+<script>
+    var formQuery = document.getElementById("formQuery");
+
+    function add() {
+        var newText = document.createElement("input");
+        newText.setAttribute("type",'text')
+        newText.setAttribute("name",'text')
+        formQuery.appendChild(newText);
+    }
+
+    function remove() {
+        var input_tags = formQuery.getElementsByTagName('input');
+        if(input_tags.length > 2) {
+            formQuery.removeChild(input_tags[(input_tags.length) - 1]);
+        }
+    }
+</script>
+</body>
+</html>
