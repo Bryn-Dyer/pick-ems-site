@@ -1,14 +1,14 @@
 <?php 
-include "header.php";
 include "functions.php";
-databaseInitialise($link);
+include_once "header.php";
+// databaseInitialise($link); Need to fix
 session_start();
 if(!isset($_SESSION['loggedin'])) {
     header("Location: localhost/pick-ems/login.php");
 } else {
     $stmt = mysqli_prepare($link, "SELECT Access_Level FROM users WHERE user_id = ?");
     mysqli_stmt_bind_param($stmt, "i", $_SESSION["id"]);
-    mysqli_stmt_execute($smtt);
+    mysqli_stmt_execute($stmt);
     mysqli_stmt_bind_result($stmt, $accessLevel);
     mysqli_stmt_fetch($stmt);
 }
