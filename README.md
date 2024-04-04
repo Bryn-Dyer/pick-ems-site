@@ -1,3 +1,3 @@
 "# pick-ems-site" 
 
-A website to predict sports game (currently only the NFL) and track outcomes for various users using my SQL and PHP.
+A website to predict sports game and track outcomes for various users using MySQL and PHP.
