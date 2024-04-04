@@ -2,7 +2,7 @@
 include "header.php";
 session_start();
 if(!isset($_SESSION['loggedin'])) {
-    header("Location: localhost/pick-ems/index.php");
+    header("Location: index.php");
 }
 $name = $conf = $div = '';
 $nameErr = $confErr = $divErr = '';
