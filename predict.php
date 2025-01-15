@@ -4,15 +4,18 @@ Additional
 User can submit multiple games at a time
 
 */
+// Initiialise page
 require 'functions.php';
 include_once "header.php";
 session_start();
 if(!isset($_SESSION['loggedin'])) {
     header("Location: index.php");
 }
+// Pre allocate Variables
 $game_id = $user_id = $ouctome = "";
 $gameErr = $userErr = "";
-
+// Main Logic
+// Validation to ensure all data is entered
 if (isset($_POST["predict"])) {
     if(empty($_POST["game_id"])){
         $gameErr = "Game ID Required";
@@ -25,11 +28,13 @@ if (isset($_POST["predict"])) {
         $user_id = $_SESSION['id'];
     }
     $outcome = $_POST["Prediction"];
+    // If validation passess move to submit else fail and return error
     if(empty($gameErr) && empty($userErr)) {
         $stmt = mysqli_prepare($link, "SELECT * FROM predictions WHERE user_id = ? AND game_id = ?");
         mysqli_stmt_bind_param($stmt, "ii", $user_id, $game_id);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_store_result($stmt);
+        // Logic to submit as a new game if no such game exists or update a game if it does
         if(mysqli_stmt_num_rows($stmt) == 0) {
             mysqli_stmt_close($stmt);
             $stmt = mysqli_prepare($link, "INSERT INTO predictions (game_id, user_id, prediction) VALUES (?,?,?)");

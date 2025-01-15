@@ -1,11 +1,15 @@
 <?php
+// Initiialise page
 include 'header.php';
+// Pre allocate Variables
 $username = $password = $confirmPassword =  '';
 $usernameErr = $passwordErr = $confirmErr = '';
+// Main Logic
+// Validation to ensure all data is entered
 if (isset($_POST['submit'])) {
     if (empty($_POST['username'])) {
         $usernameErr = 'Username is required';
-    } else {
+    } else { // Check to ensure User doesn't already exists where Name is a unique ID
         $stmt = mysqli_prepare($link, "SELECT Name FROM users WHERE Name = ?");
         mysqli_stmt_bind_param($stmt, "s", $_POST['username']);
         mysqli_stmt_execute($stmt);
@@ -27,11 +31,12 @@ if (isset($_POST['submit'])) {
     } else {
         $confirmPassword = $_POST['confirm_password'];
     }
-    if(empty($passwordErr) && ($password != $confirmPassword)) {
+    if(empty($passwordErr) && ($password != $confirmPassword)) { 
         $confirmErr = "Passwords do not match";
     } 
+    // If validation passess move to submit else fail and return error
     if (empty($usernameErr) && empty($passwordErr) && empty($confirmErr)) {
-    $password = password_hash($_POST['password'],PASSWORD_DEFAULT);
+    $password = password_hash($_POST['password'],PASSWORD_DEFAULT); // Passing the password in hashed for security
     $stmt = mysqli_prepare($link, "INSERT INTO users (Name, hash) VALUES (?,?)");
     mysqli_stmt_bind_param($stmt, "ss", $username, $password);
     mysqli_stmt_execute($stmt);

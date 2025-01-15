@@ -9,13 +9,16 @@ Query multiple users records at the same time
 See users records for a given team(s) / division(s) / ect.
 
 */
+// Initiialise page
 include 'functions.php';
-$userErr = $predErr = '';
-$user = $predSum = $correctSum = $userID = '';
-session_start();
 if(!isset($_SESSION['loggedin'])) {
     header("Location: index.php");
 }
+// Pre allocate Variables
+$userErr = $predErr = '';
+$user = $predSum = $correctSum = $userID = '';
+session_start();
+
 if(isset($_GET["submit"])) {
     if(empty($_GET['User']) && !empty($_SESSION['id'])) {
         // Fill in from session

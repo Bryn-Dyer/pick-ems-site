@@ -2,14 +2,18 @@
 /*TO DO:
 
 */
-session_start();
+// Initiialise page
+session_start(); 
 if(!isset($_SESSION['loggedin'])) {
     header("Location: index.php");
 }
 
 include 'header.php';
+// Pre allocate Variables
 $homeTeam = $awayTeam = $date = $week = $year = '';
 $homeErr = $awayErr = $dateErr = $weekErr = $yearErr = '';
+// Main Logic
+// Validation to ensure all data is entered
 if (isset($_POST['submit'])) {
     if (empty($_POST['homeTeam'])) {
         $homeErr = 'Home Team is required';
@@ -36,6 +40,7 @@ if (isset($_POST['submit'])) {
     } else {
         $year = $_POST['season_year'];
     }
+    // If validation passess move to submit else fail and return error
     if (empty($homeErr) && empty($awayErr) && empty($dateErr) && empty($weekErr) && empty($yearErr)) {
         $stmt = mysqli_prepare($link, "INSERT INTO games (Away, Home, date, season_week, year) VALUES (?, ?, ?, ?, ?)");
         mysqli_stmt_bind_param($stmt, "ssssi", $awayTeam, $homeTeam, $date, $week, $year);

@@ -1,11 +1,15 @@
 <?php
+// Initiialise page
 include "header.php";
 session_start();
 if(!isset($_SESSION['loggedin'])) {
     header("Location: index.php");
 }
+// Pre allocate Variables
 $name = $conf = $div = '';
 $nameErr = $confErr = $divErr = '';
+// Main Logic
+// Validation to ensure all data is entered
 if(isset($_POST["sumbit"])) {
     if (empty($_POST['name'])) {
         $nameErr = 'Name is required';
@@ -22,6 +26,7 @@ if(isset($_POST["sumbit"])) {
     } else {
         $div = $_POST['division'];
     }
+    // If validation passess move to submit else fail and return error
     if(empty($nameErr) && empty($confErr) && empty($divErr)) {
         $stmt = mysqli_prepare($link, "SELECT * FROM teams WHERE name = ?, conference = ?, division = ?");
         mysqli_stmt_bind_param($stmt, "sss", $name, $conf, $div);

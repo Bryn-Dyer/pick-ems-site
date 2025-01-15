@@ -1,8 +1,10 @@
 <?php 
+// Initiialise page
 include "functions.php";
 include_once "header.php";
 databaseInitialise($link);
 session_start();
+// Move user to Login if they are not, if they are show get acess level and show relevant index
 if(!isset($_SESSION['loggedin'])) {
     header("Location: login.php");
 } else {
@@ -22,7 +24,7 @@ if(!isset($_SESSION['loggedin'])) {
         <a href=create_team.php>Create Team</a></br>
         <a href=create_game.php>Create Game</a></br>
         <?php endif?>
-        <a href=schedule/php>Schedule</a></br>
+        <a href=schedule.php>Schedule</a></br>
         <a href=predict.php>Predict</a></br>
         <a href=results.php>Results</a></br>
         <a href=records.php>Records</a></br>

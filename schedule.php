@@ -1,4 +1,5 @@
 <?php
+// Initiialise page
 require 'functions.php';
 include_once 'header.php';
 session_start();
@@ -34,7 +35,9 @@ if(!isset($_SESSION['loggedin'])) {
         </div>
         </form>
     <?php 
-    if(isset($_GET['submit'])) {
+    // Main Logic
+    // Validation to ensure all data is entered
+    if(isset($_GET['submit'])) { //Checking if a specific week is searched if not use cookies to find last searched week
         $results = getResults($link,$_GET['season_week'],$_GET['year']);
         if(empty($results)) {
             echo "No Games Found";

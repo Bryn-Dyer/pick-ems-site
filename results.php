@@ -4,12 +4,16 @@ include_once "header.php";
 /*TO DO:
 Ability to submit multiple games at a time
 */
+// Initiialise page
 session_start();
 if(!isset($_SESSION['loggedin'])) {
     header("Location: index.php");
 }
+// Pre allocate Variables
 $game_id = $outcome = "";
 $gameErr = '';
+// Main Logic
+// Validation to ensure all data is entered
 if (isset($_POST["submit_result"])) {
     if(empty($_POST["game_id"])){
         $gameErr = "Game ID Required";
@@ -17,11 +21,13 @@ if (isset($_POST["submit_result"])) {
         $game_id = $_POST["game_id"];
     }
     $outcome = $_POST["Outcome"];
+    // If validation passess move to submit else fail and return error
     if(empty($gameErr)) {
         $stmt = mysqli_prepare($link, "SELECT * FROM results WHERE game_id = ?");
         mysqli_stmt_bind_param($stmt, "i", $game_id);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_store_result($stmt);
+        // Logic to either update or insert game result depending on whether an entry already exists
         if(mysqli_stmt_num_rows($stmt) == 0) {
             mysqli_stmt_close($stmt);
             $stmt = mysqli_prepare($link, "INSERT INTO results (game_id, result) VALUES (?,?)");
